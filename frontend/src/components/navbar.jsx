@@ -1,14 +1,15 @@
 import React from 'react';
 
-const Navbar = () => {
+const Navbar = ({routes}) => {
+    console.log(routes);
     return (
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <nav className="navbar navbar-expand-lg bg-body-tertiary fixed-top">
             <div className="container-fluid">
                 <a
                     className="navbar-brand"
                     href="#"
                 >
-                    Navbar scroll
+                    PREP Software
                 </a>
                 <button
                     aria-controls="navbarScroll"
@@ -97,23 +98,6 @@ const Navbar = () => {
                             </a>
                         </li>
                     </ul>
-                    <form
-                        className="d-flex"
-                        role="search"
-                    >
-                        <input
-                            aria-label="Search"
-                            className="form-control me-2"
-                            placeholder="Search"
-                            type="search"
-                        />
-                        <button
-                            className="btn btn-outline-success"
-                            type="submit"
-                        >
-                            Search
-                        </button>
-                    </form>
                 </div>
             </div>
         </nav>
