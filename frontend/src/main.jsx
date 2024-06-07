@@ -6,15 +6,30 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import './index.css'
+import VotingPage from "./pages/VotingPage.jsx"
+import ResultPage from "./pages/ResultPage.jsx"
+import AdminPage from './pages/AdminPage.jsx';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    children: [
+      {
+        title: "Votar",
+        path: "/voting",
+        element: <VotingPage />,
+      },
+      {
+        title: "Resultados",
+        path: "/Results",
+        element: <ResultPage />
+      },
+    ]
   },
   {
-    path: "/helloWorld",
-    element: <h1>Hola mundo</h1>,
+    path: "/administrador",
+    element: <AdminPage />
   },
 ]);
 
