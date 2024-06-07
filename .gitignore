@@ -1,0 +1,34 @@
+# .gitignore
+
+# Docker
+####################
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Python
+####################
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+
+# Node.js / Vue.js
+####################
+node_modules/
+npm-debug.log
+yarn-error.log
+dist/
+
+# IDEs / Editors
+####################
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*.bak
