@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from '../components/Login';
 
-const AdminPage = () => {
+const OfficialPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
@@ -17,9 +17,9 @@ const AdminPage = () => {
       {!isLoggedIn && <Login onLogin={handleLogin} />}
 
       {/* Mostrar VotingSection si el usuario está autenticado */}
-      {isLoggedIn && <h1>YYYYY</h1> }
+      {isLoggedIn && <h1>XXXX</h1> }
     </div>
   );
 };
 
-export default AdminPage;
+export default OfficialPage;

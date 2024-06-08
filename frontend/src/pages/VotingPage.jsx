@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import VotingSection from '../components/VotingSection';
+import CardVerificar from '../components/CardVerificar';
 
-const PrincipalPage = () => {
-    
-    return (
-        <div>
-            <h1 style={{ textAlign: 'center', color: 'blue' }}>Página Para votar</h1>
-            <p style={{ fontSize: '18px', textAlign: 'center' }}>¡Bienvenido a nuestra página principal!</p>
-            {/* Aquí puedes agregar el contenido de tu página */}
-        </div>
-    );
+const VotingPage = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleVoting = () => {
+    // Aquí podrías realizar la lógica de autenticación (por ejemplo, verificar credenciales)
+    // En este ejemplo simple, simplemente establecemos isLoggedIn en true
+    setIsLoggedIn(true);
+  };
+
+  return (
+    <div className="container">
+      {/* Mostrar CardVerification si el usuario no está autenticado */}
+      {!isLoggedIn && <CardVerificar onVoting={handleVoting} />}
+
+      {/* Mostrar VotingSection si el usuario está autenticado */}
+      {isLoggedIn && <VotingSection />}
+    </div>
+  );
 };
 
-export default PrincipalPage;
+export default VotingPage;

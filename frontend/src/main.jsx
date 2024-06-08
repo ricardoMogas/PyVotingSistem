@@ -8,7 +8,9 @@ import {
 import './index.css'
 import VotingPage from "./pages/VotingPage.jsx"
 import ResultPage from "./pages/ResultPage.jsx"
-import AdminPage from './pages/AdminPage.jsx';
+import AdminPage from './pages/AdminPage.jsx'
+import OfficialPage from './pages/OfficialPage.jsx'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/administrador",
     element: <AdminPage />
+  },
+  {
+    path: "/official",
+    element: <OfficialPage />
   },
 ]);
 
