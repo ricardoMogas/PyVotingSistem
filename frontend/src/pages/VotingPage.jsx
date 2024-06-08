@@ -1,6 +1,7 @@
 import React from 'react';
 
 const PrincipalPage = () => {
+    
     return (
         <div>
             <h1 style={{ textAlign: 'center', color: 'blue' }}>Página Principal</h1>
