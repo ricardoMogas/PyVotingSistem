@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+
 
 const GraphPage = () => {
     // Sample data for the graph
@@ -13,17 +13,11 @@ const GraphPage = () => {
     ];
 
     return (
-        <div>
-            <h1>Graph Page</h1>
-            <LineChart width={500} height={300} data={data}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="value" stroke="#8884d8" />
-            </LineChart>
-        </div>
+        <>
+            <h1 style={{ textAlign: 'center', color: 'blue' }}>Resultados Page</h1>
+            <p style={{ fontSize: '18px', textAlign: 'center' }}>This is the graph page</p>
+            {/* Add your graph component here */}
+        </>
     );
 };
 

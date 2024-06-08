@@ -1,6 +1,6 @@
 import React from 'react';
-
-const Navbar = ({routes}) => {
+import { Link } from 'react-router-dom';
+const Navbar = ({ routes }) => {
     console.log(routes);
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary fixed-top">
@@ -33,69 +33,14 @@ const Navbar = ({routes}) => {
                         }}
                     >
                         <li className="nav-item">
-                            <a
-                                aria-current="page"
-                                className="nav-link active"
-                                href="#"
-                            >
-                                Home
-                            </a>
+                            <Link to="/voting" className="nav-link" aria-current="page">
+                                Votar
+                            </Link>
                         </li>
                         <li className="nav-item">
-                            <a
-                                className="nav-link"
-                                href="#"
-                            >
-                                Link
-                            </a>
-                        </li>
-                        <li className="nav-item dropdown">
-                            <a
-                                aria-expanded="false"
-                                className="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                href="#"
-                                role="button"
-                            >
-                                Link
-                            </a>
-                            <ul className="dropdown-menu">
-                                <li>
-                                    <a
-                                        className="dropdown-item"
-                                        href="#"
-                                    >
-                                        Action
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        className="dropdown-item"
-                                        href="#"
-                                    >
-                                        Another action
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr className="dropdown-divider" />
-                                </li>
-                                <li>
-                                    <a
-                                        className="dropdown-item"
-                                        href="#"
-                                    >
-                                        Something else here
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li className="nav-item">
-                            <a
-                                aria-disabled="true"
-                                className="nav-link disabled"
-                            >
-                                Link
-                            </a>
+                            <Link to="/Results" className="nav-link">
+                                Resultados
+                            </Link>
                         </li>
                     </ul>
                 </div>
