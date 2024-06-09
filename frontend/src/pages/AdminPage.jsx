@@ -65,19 +65,23 @@ const AdminPage = () => {
         <Login onLogin={handleLogin} />
       ) : (
         <>
-          <Row noGutters className="bg-dark text-white p-4">
+          <Row className="g-0 bg-dark text-white p-4">
             <Col>
               <h1 className="text-center">Administrador</h1>
             </Col>
           </Row>
-          <Row noGutters>
+          <Row className="g-0">
             <Col xs="12" md="3" className="bg-secondary text-white p-4">
               <Nav vertical>
                 <NavItem>
-                  <NavLink href="#" active={activeTab === 'officials'} onClick={() => setActiveTab('officials')}>Funcionarios</NavLink>
+                  <NavLink href="#" active={activeTab === 'officials'} onClick={() => setActiveTab('officials')}
+                    style={{ fontSize: '2em' }}
+                    >Funcionarios</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="#" active={activeTab === 'parties'} onClick={() => setActiveTab('parties')}>Partidos</NavLink>
+                  <NavLink href="#" active={activeTab === 'parties'} onClick={() => setActiveTab('parties')}
+                    style={{ fontSize: '2em' }}
+                    >Partidos</NavLink>
                 </NavItem>
               </Nav>
             </Col>
@@ -87,7 +91,7 @@ const AdminPage = () => {
                   <CardBody>
                     <CardTitle tag="h2">Funcionarios de casilla</CardTitle>
                     <h3>Agrega un nuevo funcionario</h3>
-                    <Form>
+                    <Form form="">
                       <Row form>
                         <Col md={6}>
                           <FormGroup>
@@ -127,7 +131,7 @@ const AdminPage = () => {
                           <th>Status</th>
                           <th>Acciones</th>
                         </tr>
-                      </thead>
+                        </thead>
                       <tbody>
                         {officials.map((official) => (
                           <tr key={official.id} className={!official.active ? "text-muted" : ""}>
@@ -151,17 +155,17 @@ const AdminPage = () => {
                             ) : (
                               official.email
                             )}</td>
-                            <td>{official.active ? 'Active' : 'Inactive'}</td>
+                            <td>{official.active ? 'Activo' : 'Inactivo'}</td>
                             <td>
                               {editingOfficial?.id === official.id ? (
                                 <>
-                                  <Button color="primary" onClick={handleUpdateOfficial} className="mr-2">Save</Button>
-                                  <Button color="secondary" onClick={() => setEditingOfficial(null)}>Cancel</Button>
+                                  <Button color="primary" onClick={handleUpdateOfficial} className="mr-2">Guardar</Button>
+                                  <Button color="secondary" onClick={() => setEditingOfficial(null)}>Cancelar</Button>
                                 </>
                               ) : (
                                 <>
-                                  <Button color="warning" onClick={() => setEditingOfficial(official)} className="mr-2">Edit</Button>
-                                  <Button color="danger" onClick={() => handleDeleteOfficial(official.id)}>Delete</Button>
+                                  <Button color="warning" onClick={() => setEditingOfficial(official)} className="mr-2">Editar</Button>
+                                  <Button color="danger" onClick={() => handleDeleteOfficial(official.id)}>Eliminar</Button>
                                 </>
                               )}
                             </td>
@@ -177,7 +181,7 @@ const AdminPage = () => {
                   <CardBody>
                     <CardTitle tag="h2">Partidos políticos</CardTitle>
                     <h3>Agregar un nuevo partido</h3>
-                    <Form>
+                    <Form form="">
                       <Row form>
                         <Col md={6}>
                           <FormGroup>
@@ -225,17 +229,17 @@ const AdminPage = () => {
                               party.acronym
                             )}</td>
                             <td>{party.logo}</td>
-                            <td>{party.active ? 'Active' : 'Inactive'}</td>
+                            <td>{party.active ? 'Activo' : 'Inactivo'}</td>
                             <td>
                               {editingParty?.id === party.id ? (
                                 <>
-                                  <Button color="primary" onClick={handleUpdateParty} className="mr-2">Save</Button>
-                                  <Button color="secondary" onClick={() => setEditingParty(null)}>Cancel</Button>
+                                  <Button color="primary" onClick={handleUpdateParty} className="mr-2">Guardar</Button>
+                                  <Button color="secondary" onClick={() => setEditingParty(null)}>Cancelar</Button>
                                 </>
                               ) : (
                                 <>
-                                  <Button color="warning" onClick={() => setEditingParty(party)} className="mr-2">Edit</Button>
-                                  <Button color="danger" onClick={() => handleDeleteParty(party.id)}>Delete</Button>
+                                  <Button color="warning" onClick={() => setEditingParty(party)} className="mr-2">Editar</Button>
+                                  <Button color="danger" onClick={() => handleDeleteParty(party.id)}>Eliminar</Button>
                                 </>
                               )}
                             </td>
@@ -255,3 +259,4 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
+
