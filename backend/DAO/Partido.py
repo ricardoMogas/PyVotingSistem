@@ -51,7 +51,11 @@ class Partido(conexiondb):
     
     def get_Partidos(self):
         query = 'SELECT * FROM "Partido"'
-        return self.fetch_all_as_dict(query)
+        result = self.fetch_all_as_dict(query)
+        # Convert the 'imagen' field from bytes to base64 string
+        for partido in result:
+            partido['imagen'] = base64.b64encode(partido['imagen']).decode('utf-8')
+        return result
 
 """
 if __name__ == '__main__':
