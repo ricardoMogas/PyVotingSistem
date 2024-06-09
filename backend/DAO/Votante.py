@@ -14,9 +14,8 @@ class Votante(conexiondb):
             '"nombre" TEXT',
             '"CalveElec" TEXT',
             '"Id_Estado" INTEGER',
-            '"bandera" BLOB',
-            '"Id_Casilla" INTEGER',
-            'FOREIGN KEY("Id_Casilla") REFERENCES "Casilla"("Id_Casilla")',
+            '"bandera" INTEGER',
+            '"seccion" TEXT',
             'FOREIGN KEY("Id_Estado") REFERENCES "Estado"("Id_Estado")'
         ]
         self.create_table("Votante", fields)
@@ -25,13 +24,22 @@ class Votante(conexiondb):
         query = 'SELECT * FROM "Votante" WHERE "CalveElec" = ?'
         result = self.fetch_one(query, (claveElec,))
         return result is not None
+    
+    def get_one_votante(self, claveElec):
+        query = 'SELECT * FROM "Votante" WHERE "CalveElec" = ?'
+        return self.fetch_one(query, (claveElec,))
 
-    def create_votante(self, nombre, claveElec, id_estado, bandera, id_casilla):
+    def create_votante(self, nombre, claveElec, id_estado, bandera, seccion):
         if self.check_votante_exists(claveElec):
             return f"Votante with CalveElec {claveElec} already exists."
-        query = 'INSERT INTO "Votante" ("nombre", "CalveElec", "Id_Estado", "bandera", "Id_Casilla") VALUES (?, ?, ?, ?, ?)'
-        self.execute_query(query, (nombre, claveElec, id_estado, bandera, id_casilla))
-        print(f"Votante with CalveElec {claveElec} created.")
+        query = 'INSERT INTO "Votante" ("nombre", "CalveElec", "Id_Estado", "bandera", "seccion") VALUES (?, ?, ?, ?, ?)'
+        self.execute_query(query, (nombre, claveElec, id_estado, bandera, seccion))
+        return f"Votante with CalveElec {claveElec} created."
+    
+    def update_bandera(self, claveElec):
+        query = 'UPDATE "Votante" SET "bandera" = 1 WHERE "CalveElec" = ?'
+        self.execute_query(query, (claveElec,))
+        return f"Bandera updated for Votante with CalveElec {claveElec}."
 
     def get_votantes(self):
         query = 'SELECT * FROM "Votante"'

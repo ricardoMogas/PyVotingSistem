@@ -19,6 +19,10 @@ class CandidatoPre(conexiondb):
             'FOREIGN KEY("Id_Part") REFERENCES "Partido"("Id_Part")'
         ]
         self.create_table("CandidatoPre", fields)
+    
+    def get_one_candidato_pre(self, Id_CandPre):
+        query = 'SELECT * FROM "CandidatoPre" WHERE "Id_CandPre" = ?'
+        return self.fetch_one(query, (Id_CandPre,))
 
     def create_candidato_pre(self, nombreComp, Id_Part, descripcion, imagen):
         # Convert base64 image to blob
@@ -34,8 +38,10 @@ class CandidatoPre(conexiondb):
         query = 'SELECT * FROM "CandidatoPre" WHERE "Id_CandPre" = ?'
         return self.fetch_one(query, (Id_CandPre,))
 
+"""
 if __name__ == '__main__':
     candidato_pre = CandidatoPre()
-    print(candidato_pre.create_candidato_pre("TEST", 1, "TEST", "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABzklEQVR42mNkAAJjY2Bg"))
+    candidato_pre.create_candidato_pre("Candidato 1", 1, "Descripcion 1", "imagen1")
     print(candidato_pre.get_all_candidato_pre())
     print(candidato_pre.get_candidato_pre(1))
+"""

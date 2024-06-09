@@ -18,10 +18,10 @@ class Casilla(conexiondb):
         ]
         self.create_table("Casilla", fields)
 
-    def check_casilla_exists(self, id_casilla):
-        query = 'SELECT * FROM "Casilla" WHERE "Id_Casilla" = ?'
-        result = self.fetch_one(query, (id_casilla,))
-        return result is not None
+    def check_casilla_exists(self, seccion, id_estado):
+        query = 'SELECT * FROM "Casilla" WHERE "seccion" = ? AND "Id_Estado" = ?'
+        result = self.fetch_one(query, (seccion, id_estado))
+        return result
 
     def create_casilla(self, seccion, ubicacion, id_estado):
         if not seccion.isdigit() or len(seccion) != 4:
