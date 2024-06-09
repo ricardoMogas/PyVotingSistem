@@ -83,23 +83,26 @@ def get_estados():
 @app.route('/candidatos', methods=['GET'])
 def get_candidatos():
     db = CandidatoPre()
-    partido = Partido()  # Create an instance of the Partido class
+    partido_instance = Partido()  # Create an instance of the Partido class
     results = db.get_all_candidato_pre()
     json_result = []
+    
     for row in results:
         # Convertir imagen a base64
         imagen_base64 = base64.b64encode(row[4]).decode('utf-8')
-        partido = partido.get_one_Partido(row[2])  # Get the partido object based on the Id_Part
+        partido = partido_instance.get_one_Partido(row[2])  # Get the partido object based on the Id_Part
         imagenPart_base64 = base64.b64encode(partido[2]).decode('utf-8')
+        
         candidato = {
             'Id_CandPre': row[0],
             'nombreComp': row[1],
-            'partido': partido[3],  # Add the partido object to the candidato dictionary
+            'partido': partido[3],  # Add the partido object to the candidatso dictionary
             'descripcion': row[3],
             'imagen': imagen_base64,
             'imagenPart': imagenPart_base64
         }
         json_result.append(candidato)
+
     return jsonify({"status": True, 'message': 'GET candidatos', 'data': json_result})
 
 # PARTISOS

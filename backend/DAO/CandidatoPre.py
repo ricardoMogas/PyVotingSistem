@@ -38,10 +38,12 @@ class CandidatoPre(conexiondb):
         query = 'SELECT * FROM "CandidatoPre" WHERE "Id_CandPre" = ?'
         return self.fetch_one(query, (Id_CandPre,))
 
+
 """
 if __name__ == '__main__':
     candidato_pre = CandidatoPre()
-    candidato_pre.create_candidato_pre("Candidato 1", 1, "Descripcion 1", "imagen1")
+    candidato_pre.create_candidato_pre("2", 1, "Descripcion 1", "")
     print(candidato_pre.get_all_candidato_pre())
     print(candidato_pre.get_candidato_pre(1))
+
 """
