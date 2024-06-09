@@ -8,8 +8,9 @@ from DAO.Voto import VotoDAO
 from DAO.Partido import Partido
 from DAO.Users import Users
 from DAO.CandidatoPre import CandidatoPre
+from DAO.Estado import Estado
 from datetime import date
-
+import base64
 
 app = Flask(__name__)
 CORS(app)
@@ -71,6 +72,35 @@ def votes_per_candidate():
             'total': result[1]
         })
     return jsonify({"status": True, 'message': 'GET votes per candidate', 'data': json })
+
+@app.route('/estados', methods=['GET'])
+def get_estados():
+    db = Estado()
+    estados = db.get_estados()
+    return jsonify({"status": True, 'message': 'GET votes per candidate', 'data': estados })
+
+# CANDIDATOS
+@app.route('/candidatos', methods=['GET'])
+def get_candidatos():
+    db = CandidatoPre()
+    partido = Partido()  # Create an instance of the Partido class
+    results = db.get_all_candidato_pre()
+    json_result = []
+    for row in results:
+        # Convertir imagen a base64
+        imagen_base64 = base64.b64encode(row[4]).decode('utf-8')
+        partido = partido.get_one_Partido(row[2])  # Get the partido object based on the Id_Part
+        imagenPart_base64 = base64.b64encode(partido[2]).decode('utf-8')
+        candidato = {
+            'Id_CandPre': row[0],
+            'nombreComp': row[1],
+            'partido': partido[3],  # Add the partido object to the candidato dictionary
+            'descripcion': row[3],
+            'imagen': imagen_base64,
+            'imagenPart': imagenPart_base64
+        }
+        json_result.append(candidato)
+    return jsonify({"status": True, 'message': 'GET candidatos', 'data': json_result})
 
 # PARTISOS
 @app.route('/partidos', methods=['GET'])

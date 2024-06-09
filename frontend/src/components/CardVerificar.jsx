@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardBody, Form, FormGroup, Label, Input, Button, Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 const CardVerificar = ({ onVoting }) => {
+  const [estados, setEstados] = useState([]);
   const [electoralKey, setElectoralKey] = useState('');
   const [error, setError] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -33,6 +33,57 @@ const CardVerificar = ({ onVoting }) => {
     }
   };
 
+  const VerificarVotanteFetch = async () => {
+    if (electoralKey.trim() !== '' && selectedState !== '' && section.trim() !== '') {
+      // Lógica para permitir el acceso (redireccionar a otra página, mostrar contenido, etc.)
+      console.log('Clave válida, acceso permitido');
+    } else {
+      setError(true);
+      return;
+    }
+
+    const url = import.meta.env.VITE_REACT_APP_BASE_API + '/check_voto';
+    const data = {
+      claveElec: electoralKey,
+      id_estado: selectedState,
+      seccion: section
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    const result = await response.json();
+    console.log('Resultado:', result);
+
+    if (!result.status) {
+      localStorage.setItem('claveElec', electoralKey);
+      localStorage.setItem('id_estado', selectedState);
+      localStorage.setItem('seccion', section);
+      onVoting();
+    } else {
+      alert('Ya votaste');
+    }
+  };
+
+  const ObtenerEstadosFetch = async () => {
+    const url = import.meta.env.VITE_REACT_APP_BASE_API + '/estados';
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        setEstados(data.data);
+        console.log('Estados:', data.data);
+      })
+      .catch(error => {
+        console.log('Error fetching data:', error);
+      });
+  }
+  useEffect(() => {
+    ObtenerEstadosFetch();
+  }, []);
   return (
     <Card>
       <CardBody>
@@ -48,8 +99,6 @@ const CardVerificar = ({ onVoting }) => {
               onChange={handleInputChange}
             />
           </FormGroup>
-          {error && <Alert color="danger">La clave electoral, estado o sección no puede estar vacía.</Alert>}
-          
           <FormGroup>
             <Label for="stateDropdown">Estado</Label>
             <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown} className="scroll-dropdown">
@@ -57,53 +106,29 @@ const CardVerificar = ({ onVoting }) => {
                 {selectedState ? selectedState : 'Selecciona un estado'}
               </DropdownToggle>
               <DropdownMenu style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                <DropdownItem onClick={() => handleDropdownSelect('Aguascalientes')}>Aguascalientes</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Baja California')}>Baja California</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Baja California Sur')}>Baja California Sur</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Campeche')}>Campeche</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Chiapas')}>Chiapas</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Chihuahua')}>Chihuahua</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Coahuila')}>Coahuila</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Colima')}>Colima</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Durango')}>Durango</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Estado de México')}>Estado de México</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Guanajuato')}>Guanajuato</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Guerrero')}>Guerrero</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Hidalgo')}>Hidalgo</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Jalisco')}>Jalisco</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Michoacán')}>Michoacán</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Morelos')}>Morelos</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Nayarit')}>Nayarit</DropdownItem>                <DropdownItem onClick={() => handleDropdownSelect('Nuevo León')}>Nuevo León</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Oaxaca')}>Oaxaca</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Puebla')}>Puebla</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Querétaro')}>Querétaro</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Quintana Roo')}>Quintana Roo</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('San Luis Potosi')}>San Luis Potosi</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Sinaloa')}>Sinaloa</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Sonora')}>Sonora</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Tabasco')}>Tabasco</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Tamaulipas')}>Tamaulipas</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Tlaxcala')}>Tlaxcala</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Veracruz')}>Veracruz</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Yucatán')}>Yucatán</DropdownItem>
-                <DropdownItem onClick={() => handleDropdownSelect('Zacatecas')}>Zacatecas</DropdownItem>
+                {estados.map((estado, index) => (
+                  <DropdownItem key={index} onClick={() => handleDropdownSelect(estado[0])}>
+                    {estado[1]}
+                  </DropdownItem>
+                ))}
               </DropdownMenu>
             </Dropdown>
           </FormGroup>
-          
+
           <FormGroup>
             <Label for="sectionInput">Sección</Label>
             <Input
-              type="number" // Cambiado a type="number" para aceptar solo números
-              inputMode="numeric" // Esta línea quita las flechas de incremento
+              type="text" // Cambiado a type="number" para aceptar solo números
+              inputMode="text" // Esta línea quita las flechas de incremento
               id="sectionInput"
               placeholder="Ingresa la sección"
               value={section}
               onChange={handleSectionInput}
             />
           </FormGroup>
-          
-          <Button color="primary" type="submit" block onClick={onVoting}>Ingresar</Button>
+
+          <Button color="primary" type="submit" block onClick={VerificarVotanteFetch}>Ingresar</Button>
+          {error && <Alert color="danger">La clave electoral, estado o sección no puede estar vacía.</Alert>}
         </Form>
       </CardBody>
     </Card>

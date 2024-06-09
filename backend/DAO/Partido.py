@@ -12,7 +12,7 @@ class Partido(conexiondb):
     def create_Partido_table(self):
         # SQL statement to create the "Partido" table
         fields = [
-            '"Id_Partido" INTEGER PRIMARY KEY AUTOINCREMENT',
+            '"Id_Part" INTEGER PRIMARY KEY AUTOINCREMENT',
             '"nombre" TEXT',
             '"siglas" TEXT',
             '"imagen" BLOB'
@@ -20,9 +20,14 @@ class Partido(conexiondb):
         self.create_table("Partido", fields)
     
     def check_Partido_exists(self, id_partido):
-        query = 'SELECT * FROM "Partido" WHERE "Id_Partido" = ?'
+        query = 'SELECT * FROM "Partido" WHERE "Id_Part" = ?'
         result = self.fetch_one(query, (id_partido,))
         return result is not None
+    
+    def get_one_Partido(self, id_partido):
+        query = 'SELECT * FROM "Partido" WHERE "Id_Part" = ?'
+        result = self.fetch_one(query, (id_partido,))
+        return result
 
     def create_Partido(self, nombre, siglas, imagen):
         if self.check_Partido_exists(nombre):

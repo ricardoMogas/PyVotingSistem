@@ -32,7 +32,7 @@ class CandidatoPre(conexiondb):
 
     def get_all_candidato_pre(self):
         query = 'SELECT * FROM "CandidatoPre"'
-        return self.fetch_all_as_dict(query)
+        return self.fetch_all(query)
 
     def get_candidato_pre(self, Id_CandPre):
         query = 'SELECT * FROM "CandidatoPre" WHERE "Id_CandPre" = ?'
