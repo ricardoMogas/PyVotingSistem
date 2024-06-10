@@ -18,6 +18,10 @@ class Users(conexiondb):
 
     def get_user_by_id(self, user_id):
         return self.fetch_one("SELECT * FROM users WHERE id_user = ?", (user_id,))
+    
+    def get_user_exist(self, name, password):
+        result = self.fetch_one("SELECT * FROM users WHERE name = ? AND password = ?", (name, password))
+        return result
 
     def insert_user(self, name, rol, password, Id_Casilla):
         try:

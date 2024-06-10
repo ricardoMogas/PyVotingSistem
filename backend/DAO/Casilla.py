@@ -27,8 +27,6 @@ class Casilla(conexiondb):
         if not seccion.isdigit() or len(seccion) != 4:
             return "Seccion must be a 4-digit number."
         # seccion = int(seccion)  # No convert the string to an integer
-        if self.check_casilla_exists(id_estado):
-            return f"Casilla with Id_Casilla {id_estado} already exists."
         query = 'INSERT INTO "Casilla" ("seccion", "ubicacion", "Id_Estado") VALUES (?, ?, ?)'
         self.execute_query(query, (seccion, ubicacion, id_estado))
         return True
@@ -51,13 +49,17 @@ class Casilla(conexiondb):
         query = 'SELECT * FROM "Casilla"'
         return self.fetch_all_as_dict(query)
 
+
 """
 if __name__ == '__main__':
     casilla = Casilla()
-    print(casilla.create_casilla("0001", "CALLE 1 NUMERO 12 CARMELO", 1))
-    print(casilla.create_casilla("0002", "CALLE 2 NUMERO 24 CARMELO", 1))
-    print(casilla.create_casilla("0003", "Avenida Ficticia 456", 3))
-    print(casilla.check_casilla_exists(1))
-    print(casilla.get_casillas())
+    print(casilla.create_casilla("0001", "CALLE 1 NUMERO 12 CARMELO", 6))
+    print(casilla.create_casilla("0002", "CALLE 2 NUMERO 24 CARMELO", 6))
+    print(casilla.create_casilla("0003", "CALLE 3 NUMERO 36 CARMELO", 6))
+    print(casilla.create_casilla("0004", "CALLE 4 NUMERO 48 CARMELO", 6))
+
 """
+
+    
+
 

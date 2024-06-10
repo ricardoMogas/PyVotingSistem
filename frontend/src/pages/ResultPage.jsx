@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col, Card, CardHeader, CardBody, CardTitle } from 'reactstrap';
 import { Chart } from '../components/Chart';
 const jsonData = {
     "data": [
@@ -41,17 +41,19 @@ const GraphPage = () => {
 
     return (
         <>
-        <br />
-        <Container style={{ height: '100vh', width: '100vw' }}>
-            <h1 style={{ textAlign: 'center', color: 'blue' }}>Pagina de resultados</h1>
-            {chartData ? (
-                <>
-                    <Chart data={chartData} />
-                </>
-            ) : (
-                <p style={{ textAlign: 'center' }}>Loading...</p>
-            )}
-        </Container>
+            <br />
+            <Card className='b-3'>
+                <CardTitle tag="h3">Resultados</CardTitle>
+                <CardBody>
+                    {chartData ? (
+                        <>
+                            <Chart data={chartData} />
+                        </>
+                    ) : (
+                        <p style={{ textAlign: 'center' }}>Loading...</p>
+                    )}
+                </CardBody>
+            </Card>
         </>
     );
 };

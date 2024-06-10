@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import { Outlet } from "react-router-dom";
@@ -13,10 +13,16 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   
+  useEffect(() => {
+    navigate('/voting');
+  }, []);
+
   return (
     <>
-      <Navbar  />
-      <Outlet />
+      <div>
+          <Navbar  />
+          <Outlet />
+      </div>
     </>
   )
 }

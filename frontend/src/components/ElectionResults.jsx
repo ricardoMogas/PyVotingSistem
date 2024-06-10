@@ -1,101 +1,218 @@
-import { Button, Card, CardBody, CardHeader, CardText, CardTitle, Col, Row } from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+import { Button, Card, CardBody, CardHeader, CardText, CardTitle, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faEye } from '@fortawesome/free-solid-svg-icons';
 
-export default function ElectionResults() {
+const ElectionResults = () => {
+  const [voteData, setVoteData] = useState({ Count: [], data: [] });
+  const [resultadosData, setResultadosData] = useState({ data: [] });
+  const [modal, setModal] = useState(false);
+  const [selectedPDF, setSelectedPDF] = useState('');
+
+  useEffect(() => {
+    const fetchVoteData = async () => {
+      try {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (!userData || !userData.Id_Casilla) {
+          throw new Error('No se encontró Id_Casilla en userData');
+        }
+
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_API}/votes_per_casilla/${userData.Id_Casilla}`);
+        if (!response.ok) {
+          throw new Error('Error al obtener los datos');
+        }
+
+        const data = await response.json();
+        setVoteData(data);
+      } catch (error) {
+        console.error('Error al obtener los datos de votos:', error);
+        // Manejo de errores aquí
+      }
+    };
+    fetchVoteData();
+  }, []);
+
+  const handleGeneratePDF = async () => {
+    try {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'application/pdf';
+
+      fileInput.onchange = async () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onload = async () => {
+          const base64Data = reader.result.split(',')[1]; // Extraer solo los datos base64
+
+          const userData = JSON.parse(localStorage.getItem('userData'));
+          if (!userData || !userData.Id_Casilla) {
+            throw new Error('No se encontró Id_Casilla en userData');
+          }
+
+          const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_API}/add_resultado`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              Id_Casilla: userData.Id_Casilla,
+              PDF: base64Data,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Error al enviar el PDF al servidor');
+          }
+
+          alert('PDF enviado correctamente.');
+        };
+      };
+
+      fileInput.click();
+    } catch (error) {
+      console.error('Error al generar el PDF:', error);
+      // Manejo de errores aquí
+    }
+  };
+
+  const toggleModal = async () => {
+    try {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      if (!userData || !userData.Id_Casilla) {
+        throw new Error('No se encontró Id_Casilla en userData');
+      }
+
+      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_API}/resultados/${userData.Id_Casilla}`);
+      if (!response.ok) {
+        throw new Error('Error al obtener los resultados');
+      }
+
+      const data = await response.json();
+      setResultadosData(data);
+      setModal(!modal);
+    } catch (error) {
+      console.error('Error al obtener los resultados:', error);
+      // Manejo de errores aquí
+    }
+  };
+
+  const handleViewPDF = (pdfBase64) => {
+    setSelectedPDF(pdfBase64);
+    setModal(true);
+  };
+
+  const handleDownloadPDF = (pdfBase64) => {
+    try {
+      const link = document.createElement('a');
+      link.href = `data:application/pdf;base64,${pdfBase64}`;
+      link.download = 'resultado.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error al descargar el PDF:', error);
+      // Manejo de errores aquí, por ejemplo, mostrar un mensaje al usuario
+    }
+  };
   return (
     <div className="container mt-5">
-         <Row className="g-0 bg-dark text-white p-4">
-            <Col>
-              <h1 className="text-center">Funcionario</h1>
-            </Col>
-          </Row>
+      <Row className="g-0 bg-dark text-white p-4">
+        <Col>
+          <h1 className="text-center">Funcionario</h1>
+        </Col>
+      </Row>
       <Row>
         <Col md={6}>
           <Card className="shadow">
             <CardHeader>
-              <CardTitle tag="h2" className="text-center">Resultados Electorales</CardTitle>
+              <CardTitle tag="h2" className="text-center">Resultados Electorales de casilla</CardTitle>
             </CardHeader>
             <CardBody>
-              <div className="table-responsive">
+              <div className="table-responsive" style={{ maxHeight: '300px', overflowY: 'scroll' }}>
                 <table className="table table-striped">
                   <thead>
                     <tr>
-                      <th>Distrito</th>
-                      <th className="text-right">Partido A</th>
-                      <th className="text-right">Partido B</th>
-                      <th className="text-right">Partido C</th>
+                      <th>Nombre</th>
+                      <th>Fecha</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Distrito 1</td>
-                      <td className="text-right">1,234</td>
-                      <td className="text-right">789</td>
-                      <td className="text-right">456</td>
-                    </tr>
-                    <tr>
-                      <td>Distrito 2</td>
-                      <td className="text-right">2,345</td>
-                      <td className="text-right">1,678</td>
-                      <td className="text-right">987</td>
-                    </tr>
-                    <tr>
-                      <td>Distrito 3</td>
-                      <td className="text-right">3,456</td>
-                      <td className="text-right">2,567</td>
-                      <td className="text-right">1,678</td>
-                    </tr>
-                    <tr>
-                      <td>Distrito 4</td>
-                      <td className="text-right">4,567</td>
-                      <td className="text-right">3,456</td>
-                      <td className="text-right">2,345</td>
-                    </tr>
+                    {voteData.data.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.Candidato}</td>
+                        <td>{item.Fecha}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
-              <div className="text-right mt-4">
-                <Button color="primary" className="d-flex align-items-center">
+              <div className="row text-right mt-4">
+                <div className='col'>
+                <Button color="primary" className="d-flex align-items-center m-1" onClick={handleGeneratePDF}>
                   <FontAwesomeIcon icon={faDownload} className="mr-2" />
                   Generar PDF
                 </Button>
+                </div>
+                <div className='col'>
+                <Button color="info" className="d-flex align-items-center m-1" onClick={toggleModal}>
+                  <FontAwesomeIcon icon={faEye} className="mr-2" />
+                  Ver Resultados
+                </Button>
+                </div>
               </div>
             </CardBody>
           </Card>
         </Col>
         <Col md={6}>
           <Row className="mt-4 mt-md-0">
-            <Col>
-              <Card className="shadow">
-                <CardBody>
-                  <CardTitle tag="h3" className="text-center">Partido A</CardTitle>
-                  <div className="text-center text-primary display-4 mb-3">12,602</div>
-                  <CardText className="text-center text-muted">Votos Totales</CardText>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="shadow">
-                <CardBody>
-                  <CardTitle tag="h3" className="text-center">Partido B</CardTitle>
-                  <div className="text-center text-primary display-4 mb-3">8,490</div>
-                  <CardText className="text-center text-muted">Votos Totales</CardText>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="shadow">
-                <CardBody>
-                  <CardTitle tag="h3" className="text-center">Partido C</CardTitle>
-                  <div className="text-center text-primary display-4 mb-3">5,466</div>
-                  <CardText className="text-center text-muted">Votos Totales</CardText>
-                </CardBody>
-              </Card>
-            </Col>
+            {voteData.Count.map((item, index) => (
+              <Col key={index}>
+                <Card className="shadow">
+                  <CardBody>
+                    <CardTitle tag="h3" className="text-center">{item.nombre}</CardTitle>
+                    <CardText className="text-center text-muted">{item.partido}</CardText>
+                    <div className="text-center text-primary display-4 mb-3">{item.total}</div>
+                    <CardText className="text-center text-muted">Votos Totales</CardText>
+                  </CardBody>
+                </Card>
+              </Col>
+            ))}
           </Row>
         </Col>
       </Row>
+
+      {/* Modal para visualizar PDF */}
+      <Modal isOpen={modal} toggle={toggleModal}>
+        <ModalHeader toggle={toggleModal}>Resultados</ModalHeader>
+        <ModalBody>
+          <Row>
+            {resultadosData.data.map((item, index) => (
+              <Col key={index}>
+                <Card>
+                  <CardBody>
+                    <CardTitle tag="h5">{item.date}</CardTitle>
+                    <CardText>Total Votos: {item.totalVotos}</CardText>
+                    <div className="text-center mb-3">
+                      <button className='btn btn-warning m-1' onClick={() => handleDownloadPDF(item.PDF)}>
+                        Descargar PDF
+                      </button>
+                    </div>
+                  </CardBody>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={toggleModal}>Cerrar</Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
-}
+};
+
+export default ElectionResults;

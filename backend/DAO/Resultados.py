@@ -22,6 +22,9 @@ class Resultados(conexiondb):
 
     def get_resultado_by_id(self, resultado_id):
         return self.fetch_one("SELECT * FROM Resultados WHERE Id_RE = ?", (resultado_id,))
+    
+    def get_resultado_by_casilla(self, casilla_id):
+        return self.fetch_all("SELECT * FROM Resultados WHERE Id_Casilla = ?", (casilla_id,))
 
     def insert_resultado(self, totalVotos, Id_Casilla, PDF, date):
         try:
@@ -49,6 +52,7 @@ class Resultados(conexiondb):
             return True
         except Exception as e:
             return str(e)
+    
 
 """
 if __name__ == '__main__':

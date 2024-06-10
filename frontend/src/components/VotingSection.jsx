@@ -68,10 +68,11 @@ const VotingSection = ({event}) => {
     ObtenerCandidatosFetch();
   }, []);
   return (
-    <Container fluid className="voting-page">
+    <Container style={{ overflowY: 'scroll', maxHeight: '800px' }}>
+      <br />
+      <br />
       <h1 className="text-center text-primary">Página Para Votar</h1>
       <p className="text-center" style={{ fontSize: '18px' }}>¡Bienvenido a nuestra página principal!</p>
-
       <Row className="justify-content-center">
         {candidates.map(candidate => (
           <Col md="4" key={candidate.Id_CandPre}>
