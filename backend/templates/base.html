@@ -1,211 +1,67 @@
+Para usar plantillas (templates) en Flask, debes seguir varios pasos, desde la creación de la estructura de carpetas hasta la definición de rutas y el uso de archivos HTML para renderizar contenido dinámico. Flask utiliza Jinja2 como su motor de plantillas por defecto.
+Pasos para usar plantillas en Flask
+1. Instalar Flask
+
+Si no lo has hecho aún, instala Flask usando pip:
+
+sh
+
+pip install Flask
+
+2. Crear la estructura de la aplicación
+
+Crea la estructura básica de tu aplicación. Una estructura común es la siguiente:
+
+vbnet
+
+your_project/
+│
+├── app.py
+├── templates/
+│   ├── base.html
+│   └── index.html
+└── static/
+    └── (optional, for static files like CSS, JS, images)
+
+3. Crear el archivo base de la aplicación
+
+En el archivo app.py, configura tu aplicación Flask y define algunas rutas que rendericen plantillas.
+
+python
+
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+4. Crear plantillas HTML
+
+Crea una plantilla base (base.html) en la carpeta templates. Este archivo servirá como base para otras plantillas y puede incluir bloques que las plantillas específicas podrán sobrescribir.
+
+html
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sistema para Votar</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1, h2, h3 {
-            color: #2c3e50;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <title>{% block title %}My Flask App{% endblock %}</title>
 </head>
 <body>
-    <h1>Sistema para Votar - API Documentation</h1>
-    <p>Bienvenido a la documentación de la API del Sistema para Votar. A continuación, se detallan los diferentes endpoints disponibles en la API, junto con sus métodos, descripciones y ejemplos de uso.</p>
-
-    <h2>Table of Contents</h2>
-    <ul>
-        <li><a href="#check_voto">/check_voto</a></li>
-        <li><a href="#votar">/votar</a></li>
-        <li><a href="#votes_per_candidate">/votes_per_candidate</a></li>
-        <li><a href="#get_estados">/estados</a></li>
-        <li><a href="#votes_per_casilla">/votes_per_casilla/<int:id_casilla></a></li>
-        <li><a href="#add_resultado">/add_resultado</a></li>
-        <li><a href="#get_resultados">/resultados/<int:Id_casilla></a></li>
-        <li><a href="#get_candidatos">/candidatos</a></li>
-        <li><a href="#get_partidos">/partidos</a></li>
-        <li><a href="#add_partido">/add_partido</a></li>
-        <li><a href="#delete_partido">/partido/<int:id></a></li>
-        <li><a href="#get_casillas">/casillas</a></li>
-        <li><a href="#Login">/Login</a></li>
-        <li><a href="#get_users">/officials</a></li>
-        <li><a href="#add_user">/add/official</a></li>
-    </ul>
-
-    <h2 id="check_voto">/check_voto</h2>
-    <h3>POST</h3>
-    <p>Verifica si un votante ha votado.</p>
-    <h4>Request Body</h4>
-    <pre>{
-    "claveElec": "string",
-    "id_estado": int,
-    "seccion": int
-}</pre>
-    <h4>Response</h4>
-    <pre>{
-    "status": boolean,
-    "message": "string"
-}</pre>
-
-    <h2 id="votar">/votar</h2>
-    <h3>POST</h3>
-    <p>Registra un voto.</p>
-    <h4>Request Body</h4>
-    <pre>{
-    "seccion": int,
-    "id_estado": int,
-    "id_candPre": int,
-    "claveElec": "string"
-}</pre>
-    <h4>Response</h4>
-    <pre>{
-    "status": boolean,
-    "message": "string"
-}</pre>
-
-    <h2 id="votes_per_candidate">/votes_per_candidate</h2>
-    <h3>GET</h3>
-    <p>Obtiene el número de votos por cada candidato.</p>
-    <h4>Response</h4>
-    <pre>{
-    "status": true,
-    "message": "GET votes per candidate",
-    "data": [
-        {
-            "nombre": "string",
-            "total": int
-        }
-    ]
-}</pre>
-
-    <h2 id="get_estados">/estados</h2>
-    <h3>GET</h3>
-    <p>Obtiene todos los estados.</p>
-    <h4>Response</h4>
-    <pre>{
-    "status": true,
-    "message": "GET votes per candidate",
-    "data": [
-        {
-            "id_estado": int,
-            "nombre": "string"
-        }
-    ]
-}</pre>
-
-    <h2 id="votes_per_casilla">/votes_per_casilla/<int:id_casilla></h2>
-    <h3>GET</h3>
-    <p>Obtiene los votos por casilla.</p>
-    <h4>Response</h4>
-    <pre>{
-    "status": true,
-    "message": "GET votes per casilla",
-    "data": [
-        {
-            "Id_Voto": int,
-            "Fecha": "YYYY-MM-DD",
-            "Candidato": "string",
-            "Id_Casilla": int
-        }
-    ],
-    "Count": [
-        {
-            "nombre": "string",
-            "partido": "string",
-            "total": int
-        }
-    ]
-}</pre>
-
-    <h2 id="add_resultado">/add_resultado</h2>
-    <h3>POST</h3>
-    <p>Agrega un resultado.</p>
-    <h4>Request Body</h4>
-    <pre>{
-    "Id_Casilla": int,
-    "PDF": "base64string"
-}</pre>
-    <h4>Response</h4>
-    <pre>{
-    "status": boolean,
-    "message": "string"
-}</pre>
-
-    <h2 id="get_resultados">/resultados/<int:Id_casilla></h2>
-    <h3>GET</h3>
-    <p>Obtiene los resultados de una casilla específica.</p>
-    <h4>Response</h4>
-    <pre>{
-    "status": true,
-    "message": "GET resultados",
-    "data": [
-        {
-            "Id_RE": int,
-            "totalVotos": int,
-            "Id_Casilla": int,
-            "PDF": "base64string",
-            "date": "YYYY-MM-DD"
-        }
-    ]
-}</pre>
-
-    <h2 id="get_candidatos">/candidatos</h2>
-    <h3>GET</h3>
-    <p>Obtiene todos los candidatos.</p>
-    <h4>Response</h4>
-    <pre>{
-    "status": true,
-    "message": "GET candidatos",
-    "data": [
-        {
-            "Id_CandPre": int,
-            "nombreComp": "string",
-            "partido": "string",
-            "descripcion": "string",
-            "imagen": "base64string",
-            "imagenPart": "base64string"
-        }
-    ]
-}</pre>
-
-    <h2 id="get_partidos">/partidos</h2>
-    <h3>GET</h3>
-    <p>Obtiene todos los partidos.</p>
-    <h4>Response</h4>
-    <pre>{
-    "status": true,
-    "message": "GET partidos",
-    "data": [
-        {
-            "id_partido": int,
-            "nombre": "string",
-            "siglas": "string",
-            "imagen": "base64string"
-        }
-    ]
-}</pre>
-
-    <h2 id="add_partido">/add_partido</h2>
-    <h3>POST</h3>
-    <p>Agrega un nuevo partido.</p>
-    <h4>Request Body</h4>
-    <pre>{
-    "nombre": "string",
-    "siglas": "string",
-    "imagen": "base64string"
-}
+    <header>
+        <h1>My Flask App</h1>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 My Flask App</p>
+    </footer>
+</body>
+</html>
