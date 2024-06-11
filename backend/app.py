@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request, render_template
-from bson.json_util import dumps
 from flask_cors import CORS
 from Database.conexiondb import conexiondb
 from DAO.Users import Users
@@ -17,22 +16,14 @@ import base64
 app = Flask(__name__)
 CORS(app)
 
-# TEMPLES para el frontend html ----------------------------------------------
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/votarPagina')
-def votarPagina():
-    return render_template('votar.html')
-
-@app.route('/resultadosPagina')
-def resultadosPagina():
-    return render_template('resultados.html')
 
 # ENDPOINTS ----------------------------------------------
 # VOTOS
-@app.route('/check_voto', methods=['POST'])
+@app.route('/ChecarVoto', methods=['POST'])
 def check_voto():
     db = Votante()
     data = request.get_json()
@@ -43,7 +34,7 @@ def check_voto():
         result = db.create_votante("Anonimo", data['claveElec'], data['id_estado'], 0, data['seccion'])
         return jsonify({"status": False, "message": result})  
 
-@app.route('/votar', methods=['POST'])
+@app.route('/RealizarVoto', methods=['POST'])
 def votar():
     casilla = Casilla()
     db = VotoDAO()
@@ -60,7 +51,7 @@ def votar():
     else:
         return jsonify({"status": False, "message": resultVoto})
 
-@app.route('/votes_per_candidate', methods=['GET'])
+@app.route('/ObtenerVotosPorCandidato', methods=['GET'])
 def votes_per_candidate():
     db = conexiondb()
     candidato = CandidatoPre()
@@ -75,13 +66,13 @@ def votes_per_candidate():
         })
     return jsonify({"status": True, 'message': 'GET votes per candidate', 'data': json })
 
-@app.route('/estados', methods=['GET'])
+@app.route('/Estados', methods=['GET'])
 def get_estados():
     db = Estado()
     estados = db.get_estados()
     return jsonify({"status": True, 'message': 'GET votes per candidate', 'data': estados })
 
-@app.route('/votes_per_casilla/<int:id_casilla>', methods=['GET'])
+@app.route('/VotosPorCasilla/<int:id_casilla>', methods=['GET'])
 def votes_per_casilla(id_casilla):
     db = conexiondb()
     query = 'SELECT * FROM Voto WHERE Id_Casilla = ?'
@@ -111,7 +102,7 @@ def votes_per_casilla(id_casilla):
     return jsonify({"status": True, 'message': 'GET votes per casilla', 'data': jsonResult, "Count": resultCount})
 
 
-@app.route('/add_resultado', methods=['POST'])
+@app.route('/AgregarResultado', methods=['POST'])
 def add_resultado():
     db = Resultados()
     data = request.get_json()
@@ -141,7 +132,7 @@ def get_resultados(Id_casilla):
     return jsonify({"status": True, 'message': 'GET resultados', 'data': jsonData})
 
 # CANDIDATOS
-@app.route('/candidatos', methods=['GET'])
+@app.route('/ObtenerCandidatos', methods=['GET'])
 def get_candidatos():
     db = CandidatoPre()
     partido_instance = Partido()  # Create an instance of the Partido class

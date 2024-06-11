@@ -24,7 +24,7 @@ const GraphPage = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const url = import.meta.env.VITE_REACT_APP_BASE_API + '/votes_per_candidate';
+            const url = import.meta.env.VITE_REACT_APP_BASE_API + '/ObtenerVotosPorCandidato';
             try {
                 const response = await fetch(url);
                 const result = await response.json();

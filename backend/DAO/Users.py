@@ -46,9 +46,12 @@ class Users(conexiondb):
         except Exception as e:
             return str(e)
 """
+
 if __name__ == '__main__':
     users = Users()
-    users.insert_user("adm1", 0, "1234", 0) # ADMINISTRADOR
+    users.insert_user("test2", 1, "1234", 11) # ADMINISTRADOR
+    users.insert_user("test2", 1, "1234", 19) # ADMINISTRADOR
     # users.insert_user("test2", 1, "1234", 2) # FUNCIONARIO DE CASILLA
-    print(users.get_user_by_id(3))
+
+
 """

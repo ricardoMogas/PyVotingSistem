@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, FormGroup, Label, Input, Button, Card, CardTitle, CardHeader, CardBody } from 'reactstrap';
+import { useLocation } from 'react-router-dom';
 
 const Login = ({ onLogin }) => {
   const [formData, setFormData] = useState({ username: '', password: '' });
-
+const location = useLocation();
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
     const url = import.meta.env.VITE_REACT_APP_BASE_API + '/Login';
     try {
@@ -29,12 +31,6 @@ const Login = ({ onLogin }) => {
       }
 
       const data = await response.json();
-
-      // Verificar el rol obtenido
-      if (data.data.rol === 0) {
-        alert('Cuenta con un rol incorrecto para iniciar sesión.');
-        return; // Salir de la función sin hacer más acciones
-      }
 
       // Guardar datos en localStorage
       localStorage.setItem('userData', JSON.stringify(data.data));

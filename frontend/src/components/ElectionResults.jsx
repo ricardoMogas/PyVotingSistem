@@ -17,7 +17,7 @@ const ElectionResults = () => {
           throw new Error('No se encontró Id_Casilla en userData');
         }
 
-        const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_API}/votes_per_casilla/${userData.Id_Casilla}`);
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_API}/VotosPorCasilla/${userData.Id_Casilla}`);
         if (!response.ok) {
           throw new Error('Error al obtener los datos');
         }
@@ -53,7 +53,7 @@ const ElectionResults = () => {
             throw new Error('No se encontró Id_Casilla en userData');
           }
 
-          const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_API}/add_resultado`, {
+          const response = await fetch(`${import.meta.env.VITE_REACT_APP_BASE_API}/AgregarResultado`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

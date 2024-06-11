@@ -42,7 +42,7 @@ const CardVerificar = ({ onVoting }) => {
       return;
     }
 
-    const url = import.meta.env.VITE_REACT_APP_BASE_API + '/check_voto';
+    const url = import.meta.env.VITE_REACT_APP_BASE_API + '/ChecarVoto';
     const data = {
       claveElec: electoralKey,
       id_estado: selectedState,
@@ -70,7 +70,7 @@ const CardVerificar = ({ onVoting }) => {
   };
 
   const ObtenerEstadosFetch = async () => {
-    const url = import.meta.env.VITE_REACT_APP_BASE_API + '/estados';
+    const url = import.meta.env.VITE_REACT_APP_BASE_API + '/Estados';
     fetch(url)
       .then(response => response.json())
       .then(data => {

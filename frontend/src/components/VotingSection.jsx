@@ -15,7 +15,7 @@ const VotingSection = ({event}) => {
   };
 
   const EnviarVotoFetch = () => {
-    const url = import.meta.env.VITE_REACT_APP_BASE_API + '/votar';
+    const url = import.meta.env.VITE_REACT_APP_BASE_API + '/RealizarVoto';
     const electoralKey = localStorage.getItem('claveElec');
     const selectedState = localStorage.getItem('id_estado');
     const section = localStorage.getItem('seccion');
@@ -51,7 +51,7 @@ const VotingSection = ({event}) => {
   };
   
   const ObtenerCandidatosFetch = async () => {
-    const url = import.meta.env.VITE_REACT_APP_BASE_API + '/candidatos';
+    const url = import.meta.env.VITE_REACT_APP_BASE_API + '/ObtenerCandidatos';
     try {
       const response = await fetch(url); // Asegúrate de que la URL sea correcta
       const data = await response.json();
